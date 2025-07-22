@@ -1,53 +1,66 @@
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 
+// Components
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import HomePage from "./components/HomePage";
+import CoursePage from "./components/CoursePage";
+import VideoPlayer from "./components/VideoPlayer";
+
+// Context
+import { LanguageProvider } from "./context/LanguageContext";
+import { UserProvider } from "./context/UserContext";
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-const Home = () => {
-  const helloWorldApi = async () => {
+function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const healthCheck = async () => {
     try {
       const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
+      console.log("Backend connected:", response.data.message);
     } catch (e) {
-      console.error(e, `errored out requesting / api`);
+      console.error("Backend connection error:", e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    helloWorldApi();
+    healthCheck();
   }, []);
 
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary"></div>
+      </div>
+    );
+  }
 
-function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <UserProvider>
+      <LanguageProvider>
+        <div className="App">
+          <BrowserRouter>
+            <Header />
+            <main className="min-h-screen">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/course" element={<CoursePage />} />
+                <Route path="/video/:videoId" element={<VideoPlayer />} />
+              </Routes>
+            </main>
+            <Footer />
+          </BrowserRouter>
+        </div>
+      </LanguageProvider>
+    </UserProvider>
   );
 }
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useUser } from '../context/UserContext';
-import { ArrowLeft, Lock, Play, ChevronRight, ChevronLeft } from 'lucide-react';
+import { ArrowLeft, Lock, Play, ChevronRight, ChevronLeft, Clock, List } from 'lucide-react';
 import PaymentModal from './PaymentModal';
 
 const VideoPlayer = () => {
@@ -48,7 +48,7 @@ const VideoPlayer = () => {
 
   if (!currentVideo) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-bg-light">
         <div className="text-center">
           <h1 className="heading-large text-text-primary mb-4">
             {content.currentLanguage === 'ru' ? 'Видео не найдено' : 'Video nicht gefunden'}
@@ -62,88 +62,102 @@ const VideoPlayer = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-bg-light">
       {/* Header */}
-      <div className="bg-black/90 backdrop-blur-sm p-4 flex items-center gap-4">
+      <div className="bg-white border-b border-border-light p-4 flex items-center gap-4">
         <button
           onClick={() => navigate('/course')}
-          className="text-white hover:text-brand-primary transition-colors"
+          className="text-brand-primary hover:text-brand-secondary transition-colors p-2 rounded-lg hover:bg-bg-light"
         >
           <ArrowLeft className="w-6 h-6" />
         </button>
-        <h1 className="heading-medium text-white">
-          {currentVideo.title}
-        </h1>
+        <div className="flex-1">
+          <h1 className="heading-medium text-text-primary">
+            {currentVideo.title}
+          </h1>
+          <p className="body-small text-text-muted flex items-center gap-2 mt-1">
+            <Clock className="w-4 h-4" />
+            {currentVideo.duration}
+          </p>
+        </div>
       </div>
 
-      <div className="grid lg:grid-cols-4 gap-0 min-h-screen">
+      <div className="grid lg:grid-cols-4 gap-6 p-6">
         {/* Main Video Player */}
-        <div className="lg:col-span-3 bg-black flex items-center justify-center">
-          <div className="w-full max-w-5xl aspect-video bg-gray-900 rounded-lg overflow-hidden relative">
-            {hasAccess ? (
-              <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                {/* Mock Video Player */}
-                <div className="text-center">
-                  {!isPlaying ? (
+        <div className="lg:col-span-3">
+          <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-border-light">
+            <div className="aspect-video bg-gray-900 relative">
+              {hasAccess ? (
+                <div className="video-container">
+                  <iframe
+                    src={currentVideo.videoUrl}
+                    title={currentVideo.title}
+                    allowFullScreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  />
+                </div>
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-900">
+                  <div className="text-center text-white p-8">
+                    <Lock className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <h3 className="heading-medium mb-2">
+                      {content.currentLanguage === 'ru' 
+                        ? 'Содержимое заблокировано' 
+                        : 'Inhalt gesperrt'}
+                    </h3>
+                    <p className="body-standard text-gray-400 mb-6">
+                      {content.currentLanguage === 'ru'
+                        ? 'Приобретите доступ к этому видео'
+                        : 'Erwerben Sie Zugang zu diesem Video'}
+                    </p>
                     <button
-                      onClick={() => setIsPlaying(true)}
-                      className="w-20 h-20 bg-brand-primary rounded-full flex items-center justify-center hover-scale cursor-pointer mb-4"
+                      onClick={() => setShowPaymentModal(true)}
+                      className="btn-primary"
                     >
-                      <Play className="w-10 h-10 text-white ml-1" />
+                      {content.currentLanguage === 'ru' 
+                        ? `Купить за €${currentVideo.price}` 
+                        : `Für €${currentVideo.price} kaufen`}
                     </button>
-                  ) : (
-                    <div className="text-white">
-                      <div className="w-16 h-16 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                      <p className="body-large">
-                        {content.currentLanguage === 'ru' 
-                          ? 'Загрузка видео...' 
-                          : 'Video wird geladen...'}
-                      </p>
-                    </div>
-                  )}
-                  
-                  <p className="text-white body-standard mb-2">
-                    {currentVideo.title}
-                  </p>
-                  <p className="text-gray-400 body-small">
-                    {content.currentLanguage === 'ru' 
-                      ? 'Продолжительность:' 
-                      : 'Dauer:'} {currentVideo.duration}
-                  </p>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-900">
-                <div className="text-center text-white">
-                  <Lock className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="heading-medium mb-2">
-                    {content.currentLanguage === 'ru' 
-                      ? 'Содержимое заблокировано' 
-                      : 'Inhalt gesperrt'}
+              )}
+            </div>
+            
+            {/* Video Info */}
+            <div className="p-6">
+              <h2 className="heading-large text-text-primary mb-2">
+                {currentVideo.title}
+              </h2>
+              <p className="body-large text-text-secondary mb-4">
+                {currentVideo.description}
+              </p>
+              
+              {/* Topics Covered */}
+              {currentVideo.content && currentVideo.content.topics && (
+                <div className="bg-bg-light rounded-lg p-4">
+                  <h3 className="heading-medium text-text-primary mb-3 flex items-center gap-2">
+                    <List className="w-5 h-5" />
+                    {content.currentLanguage === 'ru' ? 'Что вы изучите:' : 'Was Sie lernen werden:'}
                   </h3>
-                  <p className="body-standard text-gray-400 mb-6">
-                    {content.currentLanguage === 'ru'
-                      ? 'Приобретите доступ к этому видео'
-                      : 'Erwerben Sie Zugang zu diesem Video'}
-                  </p>
-                  <button
-                    onClick={() => setShowPaymentModal(true)}
-                    className="btn-primary"
-                  >
-                    {content.currentLanguage === 'ru' 
-                      ? `Купить за €${currentVideo.price}` 
-                      : `Für €${currentVideo.price} kaufen`}
-                  </button>
+                  <ul className="space-y-2">
+                    {currentVideo.content.topics.map((topic, index) => (
+                      <li key={index} className="body-standard text-text-secondary flex items-start gap-2">
+                        <span className="w-2 h-2 bg-brand-primary rounded-full mt-2 flex-shrink-0"></span>
+                        {topic}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
 
         {/* Sidebar */}
-        <div className="lg:col-span-1 bg-white border-l border-border-light">
-          <div className="p-6">
-            <h2 className="heading-medium text-text-primary mb-6">
+        <div className="lg:col-span-1">
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-border-light">
+            <h2 className="heading-medium text-text-primary mb-6 flex items-center gap-2">
+              <BookOpen className="w-5 h-5" />
               {content.currentLanguage === 'ru' ? 'Список уроков' : 'Lektionsliste'}
             </h2>
             
@@ -155,35 +169,47 @@ const VideoPlayer = () => {
                 return (
                   <div
                     key={video.id}
-                    className={`p-4 rounded-lg cursor-pointer transition-all ${
+                    className={`p-4 rounded-lg cursor-pointer transition-all card-hover ${
                       isActive 
-                        ? 'bg-brand-primary/10 border border-brand-primary' 
+                        ? 'bg-brand-light border-brand-primary' 
                         : 'bg-bg-light hover:bg-bg-subtle'
                     }`}
                     onClick={() => handleNavigateVideo(video)}
                   >
                     <div className="flex items-start gap-3">
-                      <span className="body-small text-text-muted mt-1">
+                      <span className="body-small text-text-muted mt-1 font-medium">
                         {String(index + 1).padStart(2, '0')}
                       </span>
                       
                       <div className="flex-1 min-w-0">
-                        <h4 className="body-standard font-medium text-text-primary mb-1">
+                        <h4 className={`body-standard font-medium mb-1 ${
+                          isActive ? 'text-brand-primary' : 'text-text-primary'
+                        }`}>
                           {video.title}
                         </h4>
                         <div className="flex items-center justify-between">
-                          <span className="body-small text-text-muted">
+                          <span className="body-small text-text-muted flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
                             {video.duration}
                           </span>
                           
                           {video.isFree && (
-                            <span className="body-small text-brand-primary">
+                            <span className="body-small text-brand-primary font-medium">
                               {content.pricing.free}
                             </span>
                           )}
                           
-                          {!hasVideoAccess && (
-                            <Lock className="w-4 h-4 text-text-muted" />
+                          {!video.isFree && !hasVideoAccess && (
+                            <div className="flex items-center gap-2">
+                              <span className="body-small text-brand-primary font-medium">
+                                €{video.price}
+                              </span>
+                              <Lock className="w-4 h-4 text-text-muted" />
+                            </div>
+                          )}
+                          
+                          {hasVideoAccess && (
+                            <Play className="w-4 h-4 text-brand-primary" />
                           )}
                         </div>
                       </div>

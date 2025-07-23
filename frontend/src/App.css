@@ -1,32 +1,33 @@
 /* Import custom fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* CSS Custom Properties - AI Course Theme */
+/* CSS Custom Properties - Schneider Studios Education Blue Theme */
 :root {
   /* Backgrounds */
   --bg-primary: #FFFFFF;
-  --bg-light: #F0EDF5;
-  --bg-subtle: #E1DFE6;
+  --bg-light: #F8FAFF;
+  --bg-subtle: #E8F2FF;
   
   /* Text Colors */
   --text-primary: #0A0A0A;
   --text-secondary: #3C3B3D;
-  --text-muted: #AFADB2;
+  --text-muted: #6B7A8F;
   --text-caption: #757478;
   
   /* Borders */
-  --border-light: #CBC9CF;
-  --border-medium: #E6E4EB;
+  --border-light: #D1E2FF;
+  --border-medium: #B8D4FF;
   
-  /* Brand Colors */
-  --brand-primary: #008055;
-  --brand-secondary: #0A6647;
-  --brand-dark: #124E3B;
+  /* Brand Colors - Blue Theme */
+  --brand-primary: #2563EB;
+  --brand-secondary: #1D4ED8;
+  --brand-dark: #1E40AF;
+  --brand-light: #DBEAFE;
   
-  /* Gradient Colors */
-  --gradient-coral: #D98A8C;
-  --gradient-yellow: #E1C567;
-  --gradient-orange: #DFB573;
+  /* Gradient Colors - Blue Theme */
+  --gradient-blue-light: #DBEAFE;
+  --gradient-blue-medium: #93C5FD;
+  --gradient-blue-dark: #3B82F6;
 }
 
 /* Typography System */
@@ -43,14 +44,14 @@ body {
 
 .display-hero { 
   font-size: 56px; 
-  font-weight: 500; 
+  font-weight: 600; 
   line-height: 1.1; 
   letter-spacing: -0.02em;
 }
 
 .heading-large { 
   font-size: 32px; 
-  font-weight: 500; 
+  font-weight: 600; 
   line-height: 1.25; 
   letter-spacing: -0.01em;
 }
@@ -88,7 +89,7 @@ body {
   border-radius: 26px;
   padding: 18px 24px;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   min-height: 50px;
@@ -97,11 +98,13 @@ body {
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
 }
 
 .btn-primary:hover {
   background: var(--brand-secondary);
   transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .btn-primary:active {
@@ -117,12 +120,12 @@ body {
 
 .btn-secondary {
   background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border-medium);
-  border-radius: 8px;
-  padding: 14px 20px;
+  color: var(--brand-primary);
+  border: 2px solid var(--brand-primary);
+  border-radius: 26px;
+  padding: 16px 24px;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
@@ -132,8 +135,9 @@ body {
 }
 
 .btn-secondary:hover {
-  border-color: var(--brand-primary);
-  color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: white;
+  transform: scale(1.02);
 }
 
 .btn-small {
@@ -143,7 +147,7 @@ body {
   border-radius: 20px;
   padding: 12px 20px;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   min-height: 40px;
@@ -156,7 +160,7 @@ body {
 .form-input {
   width: 100%;
   padding: 18px;
-  border: 1px solid var(--border-medium);
+  border: 2px solid var(--border-medium);
   border-radius: 34px;
   font-size: 16px;
   background: var(--bg-primary);
@@ -167,6 +171,7 @@ body {
 
 .form-input:focus {
   border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .form-input::placeholder {
@@ -176,9 +181,9 @@ body {
 /* Gradient Backgrounds */
 .gradient-hero {
   background: linear-gradient(135deg, 
-    var(--gradient-coral) 0%, 
-    var(--gradient-yellow) 50%, 
-    var(--gradient-orange) 100%
+    var(--gradient-blue-light) 0%, 
+    var(--gradient-blue-medium) 50%, 
+    var(--gradient-blue-dark) 100%
   );
   min-height: 100vh;
   position: relative;
@@ -186,8 +191,8 @@ body {
 
 .gradient-waitlist {
   background: linear-gradient(180deg, 
-    rgba(217, 138, 140, 0.1) 0%, 
-    rgba(225, 197, 103, 0.1) 100%
+    rgba(219, 234, 254, 0.5) 0%, 
+    rgba(147, 197, 253, 0.3) 100%
   );
   padding: 80px 0;
 }
@@ -204,8 +209,8 @@ body {
   right: 0;
   bottom: 0;
   background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.9) 0%, 
-    rgba(255, 255, 255, 0.7) 100%
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(255, 255, 255, 0.8) 100%
   );
   z-index: 1;
 }
@@ -236,13 +241,26 @@ body {
 .delay-500 { animation-delay: 0.5s; }
 
 .hover-lift:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
   transition: transform 0.2s ease;
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
 }
 
 .hover-scale:hover {
   transform: scale(1.02);
   transition: transform 0.2s ease;
+}
+
+/* Card Styles */
+.card-hover {
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-light);
+}
+
+.card-hover:hover {
+  border-color: var(--brand-primary);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+  transform: translateY(-2px);
 }
 
 /* Container System */
@@ -263,13 +281,13 @@ body {
 }
 
 @media (min-width: 1440px) {
-  .display-hero { font-size: 80px; }
+  .display-hero { font-size: 80px; }  
 }
 
 @media (max-width: 809px) {
   .display-hero { font-size: 36px; line-height: 1.2; }
-  .heading-large { font-size: 24px; }
-  .heading-medium { font-size: 20px; }
+  .heading-large { font-size: 28px; }
+  .heading-medium { font-size: 22px; }
   
   .form-input { padding: 16px; }
   .container { padding: 0 16px; }
@@ -281,7 +299,39 @@ body {
 .text-text-secondary { color: var(--text-secondary); }
 .text-text-muted { color: var(--text-muted); }
 .bg-brand-primary { background-color: var(--brand-primary); }
+.bg-brand-light { background-color: var(--brand-light); }
 .bg-bg-light { background-color: var(--bg-light); }
 .bg-bg-subtle { background-color: var(--bg-subtle); }
 .border-border-light { border-color: var(--border-light); }
 .border-border-medium { border-color: var(--border-medium); }
+
+/* Video Container */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+}
+
+/* Contact Links */
+.contact-link {
+  color: var(--brand-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.contact-link:hover {
+  color: var(--brand-secondary);
+  text-decoration: underline;
+}

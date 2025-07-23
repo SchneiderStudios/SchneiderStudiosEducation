@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useUser } from '../context/UserContext';
-import { ArrowLeft, Lock, Play, ChevronRight, ChevronLeft, Clock, List } from 'lucide-react';
+import { ArrowLeft, Lock, Play, ChevronRight, ChevronLeft, Clock, List, BookOpen } from 'lucide-react';
 import PaymentModal from './PaymentModal';
 
 const VideoPlayer = () => {
